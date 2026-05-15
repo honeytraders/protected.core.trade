@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "honeytrade_core"
+version = "0.1.0"
+description = "Protected HoneyTrade quant runtime."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy",
+  "pandas",
+  "TA-Lib",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
