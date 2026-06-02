@@ -30,6 +30,10 @@ See the authoritative integration guide and ready-to-apply patch in the trade re
 - `telemetry/PATCH_EXAMPLE_FOR_PROTECTED_CORE.md`
 - `telemetry/telemetry_integration_example.py`
 
-Key: Use safe wrappers (try/finally), propagate HONEYTRADE_CORRELATION_ID, emit from _build_operating_snapshot and trade fill points.
+Key: Use safe wrappers (try/finally), propagate HONEYTRADE_CORRELATION_ID, emit from _build_operating_snapshot (for equity + health + metrics) and trade fill points (order_filled + Trade.get_trades_proxy).
+
+**Latest validation (control plane):** MCP inspection of this repo (SHA 73fc438f...) confirms _build_operating_snapshot, order_filled, bot_loop, populate_indicators, _get_open_trades (Trade.get_trades_proxy) hooks are stable and match the guides exactly. No drift. First_live_data latency tracking now live in trade (ingest records seconds from created_at, notifier enriches Telegram/Email with "arrived in ~X min" + metadata). 
+
+For 5.3 real pod validation: instrument a protected instance using the example wrapper + HONEYTRADE_INGEST_URL + token + CORRELATION_ID, trigger a real Lemon payment via web.trade, verify <10min live equity/trades/logs/health in dashboard (all SaaS warming states + pulse + realtime), rich first_trade in Telegram, /status works with heartbeat, fill evidence template. This closes the sorunsuz E2E for real protected telemetry.
 
 This enables the full seamless experience: real payment -> running pod -> live dashboard + Telegram without "no data" shock.
