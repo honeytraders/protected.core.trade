@@ -1,6 +1,42 @@
+# Python / package build
 build/
 dist/
 *.egg-info/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# Secrets & sensitive (sorunsuz process - fill real .env at end)
+.env
+.env.*
+.env.local
+!.env.example
+
+# AI-generated / temp / grok session artifacts
+*.ai
+*ai-generated*
+*.bak
+*.tmp
+.grok/
+.cursor/
+session-*/
+
+# OS / IDE
 .DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Testing / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Misc
+*.log
