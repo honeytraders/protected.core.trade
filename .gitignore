@@ -11,10 +11,10 @@ env/
 venv/
 .venv/
 
-# Secrets & sensitive (sorunsuz process - fill real .env at end)
-.env
-.env.*
-.env.local
+# Secrets - only .env and .env.example allowed (same format, explanatory)
+# Ignore all other .env* 
+.env*
+!.env
 !.env.example
 
 # AI-generated / temp / grok session artifacts
