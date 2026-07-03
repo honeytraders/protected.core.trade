@@ -17,6 +17,8 @@ Environment (injected by the K8s worker):
 
 Build wheel: `make build` or `./scripts/build-wheel.sh`.
 
+Syntax check (no wheel build): `make verify`.
+
 ## Build
 
 ```bash
