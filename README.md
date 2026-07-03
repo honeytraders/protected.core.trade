@@ -4,6 +4,19 @@ Private HoneyTrade quant runtime package.
 
 This repository contains the proprietary execution, telemetry, and strategy logic that must not be distributed as plain source through the customer-facing `trade` repository.
 
+## SaaS telemetry (protected core)
+
+`strategy.py` emits best-effort telemetry via optional `honeytrade_telemetry` (install from the `trade` repo `telemetry/` package in pod images). Hooks: `bot_start`, `_build_operating_snapshot`, `order_filled`.
+
+Environment (injected by the K8s worker):
+
+- `HONEYTRADE_TELEMETRY_INGEST_URL`
+- `HONEYTRADE_INSTANCE_ID`
+- `HONEYTRADE_ORGANIZATION_ID`
+- `HONEYTRADE_INGEST_TOKEN`
+
+Build wheel: `make build` or `./scripts/build-wheel.sh`.
+
 ## Build
 
 ```bash

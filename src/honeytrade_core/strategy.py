@@ -12,6 +12,26 @@ import talib.abstract as ta
 from freqtrade.persistence import Order, Trade
 from pandas import DataFrame
 
+try:
+    from honeytrade_telemetry import (
+        emit_equity_snapshot,
+        emit_health,
+        emit_important_log,
+        emit_trade_filled,
+    )
+except ImportError:
+    def emit_equity_snapshot(*_args, **_kwargs):  # type: ignore
+        pass
+
+    def emit_health(*_args, **_kwargs):  # type: ignore
+        pass
+
+    def emit_important_log(*_args, **_kwargs):  # type: ignore
+        pass
+
+    def emit_trade_filled(*_args, **_kwargs):  # type: ignore
+        pass
+
 logger = logging.getLogger(__name__)
 
 
@@ -168,6 +188,17 @@ class HoneyTradeStrategyCore:
         }
 
         self._last_operating_snapshot = snapshot
+
+        try:
+            emit_equity_snapshot(total_stake, available_stake, total_stake)
+            emit_health(
+                open_trades=len(open_trades),
+                closed_trade_count=closed_trade_count,
+                lifecycle_phase=lifecycle_phase,
+            )
+        except Exception:
+            pass
+
         return snapshot
 
     def _get_telegram_keyboard(self) -> List[List[str]]:
@@ -545,6 +576,13 @@ class HoneyTradeStrategyCore:
         self._last_telegram_command_poll_at = None
         self._telegram_update_offset = None
         self._send_telegram_message(self._build_start_snapshot(), include_keyboard=True, html=True)
+        try:
+            total, available = self._get_wallet_context()
+            emit_equity_snapshot(total, available, total)
+            emit_health(open_trades=0, event="bot_start")
+            emit_important_log("info", "HoneyTrade core online", session_id=self._session_id)
+        except Exception:
+            pass
 
     def bot_loop_start(self, current_time: datetime, **kwargs) -> None:
         current_time = self._as_utc(current_time)
@@ -674,6 +712,11 @@ class HoneyTradeStrategyCore:
             )
 
         self._send_telegram_message(message)
+
+        try:
+            emit_trade_filled(trade, order, current_time)
+        except Exception:
+            pass
 
     def feature_engineering_expand_all(self, dataframe: DataFrame, period: int, metadata: Dict, **kwargs) -> DataFrame:
         dataframe[f"%-rsi-period_{period}"] = ta.RSI(dataframe, timeperiod=period)
