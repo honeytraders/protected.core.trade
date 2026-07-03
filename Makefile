@@ -5,7 +5,7 @@ build:
 	python3 -m build
 
 verify:
-	python3 -m py_compile src/honeytrade_core/strategy.py src/honeytrade_core/license_guard.py
+	python3 -m py_compile src/honeytrade_core/strategy.py src/honeytrade_core/license_guard.py src/honeytrade_core/__init__.py
 
 clean:
 	rm -rf dist build src/*.egg-info
