@@ -4,6 +4,8 @@ Private HoneyTrade quant runtime package.
 
 This repository contains the proprietary execution, telemetry, and strategy logic that must not be distributed as plain source through the customer-facing `trade` repository.
 
+**Browser auth (operators):** End users sign in on `web.trade` and the `trade` dashboard (same Supabase project; cross-app session sync). Pods use `HONEYTRADE_INGEST_TOKEN` / instance env — not browser cookies.
+
 ## SaaS telemetry (protected core)
 
 `strategy.py` emits best-effort telemetry via optional `honeytrade_telemetry` (install from the `trade` repo `telemetry/` package in pod images). Hooks: `bot_start`, `_build_operating_snapshot`, `order_filled`.
